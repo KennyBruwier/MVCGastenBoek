@@ -15,7 +15,7 @@
                         Recent Comments
                     </h3>
                     <span class="label label-info">
-                        @Model.Comments.Count();
+                        @Model.Comments.Count()
                     </span>
                 </div>
                 <div class="panel-body">
@@ -31,18 +31,25 @@
                                 statusClass = "disabled";
                             editClass += statusClass;
                             deleteClass += statusClass;
+                            string imgPath = "http://placehold.it/80";
+                            if (!String.IsNullOrEmpty(item.ImgPath))
+                            {
+                                imgPath = item.ImgPath;
+                            }
 
                             <li class="list-group-item">
                                 <div class="row">
-                                    @*<div class="col-xs-2 col-md-1">
-                                        <img src="http://placehold.it/80" class="img-circle img-responsive" alt="" />
-                                    </div>*@
+                                    <div class="col-xs-2 col-md-1">
+                                        <img src="@imgPath" class="img-circle img-responsive" alt="" />
+                                    </div>
                                     <div class="col-xs-10 col-md-11">
                                         <div>
-                                            @Html.DisplayFor(modelItem => item.Title)
+                                            <strong>
+                                                @Html.DisplayFor(modelItem => item.Title)
+                                            </strong>
                                             @*<a href="http://www.jquery2dotnet.com/2013/10/google-style-login-page-desing-usign.html">
-                                                Google Style Login Page Design Using Bootstrap
-                                            </a>*@
+                                Google Style Login Page Design Using Bootstrap
+                            </a>*@
                                             <div class="mic-info">
                                                 By: @Html.DisplayFor(modelItem => item.Naam) on @Html.DisplayFor(modelItem => item.Created)
                                             </div>
@@ -51,18 +58,18 @@
                                             @Html.DisplayFor(modelItem => item.MyComment)
                                         </div>
                                         <div class="action">
-                                            <a asp-action="Edit" asp-route-id="@item.CommentId" class="@editClass" ></a> |
+                                            <a asp-action="Edit" asp-route-id="@item.CommentId" class="@editClass"></a> |
                                             <a asp-action="Details" asp-route-id="@item.CommentId" class="fa fa-info"></a> |
                                             <a asp-action="Delete" asp-route-id="@item.CommentId" class="@deleteClass"></a>
                                             @*<button type="button" class="btn btn-primary btn-xs" title="Edit" asp-action="Edit" asp-route-id="@item.CommentId">
-                                                <span class="fa fa-pencil"></span>
-                                            </button>
-                                            <button type="button" class="btn btn-success btn-xs" title="Details" asp-action="Details" asp-route-id="@item.CommentId">
-                                                <span class="fa fa-info"></span>
-                                            </button>
-                                            <button type="button" class="btn btn-danger btn-xs" title="Delete" asp-action="Delete" asp-route-id="@item.CommentId">
-                                                <span class="fa fa-trash"></span>
-                                            </button>*@
+                                <span class="fa fa-pencil"></span>
+                            </button>
+                            <button type="button" class="btn btn-success btn-xs" title="Details" asp-action="Details" asp-route-id="@item.CommentId">
+                                <span class="fa fa-info"></span>
+                            </button>
+                            <button type="button" class="btn btn-danger btn-xs" title="Delete" asp-action="Delete" asp-route-id="@item.CommentId">
+                                <span class="fa fa-trash"></span>
+                            </button>*@
                                         </div>
                                     </div>
                                 </div>
@@ -87,7 +94,7 @@
 <hr />
 <div class="row">
     <div class="col-md-4">
-        <form asp-action="Create">
+        <form asp-action="CreateFromIndex">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div class="form-group">
                 <label asp-for="@Model.Comment.Title" class="control-label"></label>

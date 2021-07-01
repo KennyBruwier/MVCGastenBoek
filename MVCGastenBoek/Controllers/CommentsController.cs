@@ -62,7 +62,20 @@ namespace MVCGastenBoek.Controllers
         {
             return View(new CommentViewModel());
         }
-
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> CreateFromIndex([Bind("Comment")] CommentIndexViewModel commentIndexViewModel)
+        {
+            if (ModelState.IsValid)
+            {
+                Comment newComment = new Comment();
+                ViewModelToModel(commentIndexViewModel.Comment, newComment);
+                _context.Add(newComment);
+                await _context.SaveChangesAsync();
+                return RedirectToAction(nameof(Index));
+            }
+            return View(commentIndexViewModel);
+        }
         // POST: Comments/Create
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
@@ -178,9 +191,6 @@ namespace MVCGastenBoek.Controllers
             if (String.IsNullOrEmpty(comment.Naam))
                 comment.Naam = User.FindFirstValue(ClaimTypes.Name);
             comment.Created = DateTime.Now;
-            //var test = signInManager.IsSignedIn(User);
-            var test2 = User.FindFirstValue(ClaimTypes.Name);
-            //comment.Author = signInManager.
             if (commentVM.NewImage != null)
             {
                 if (!String.IsNullOrEmpty(comment.ImgPath))
