@@ -21,16 +21,16 @@
                 <div class="panel-body">
                     <ul class="list-group">
                         @foreach (var item in Model.Comments)
-                            {
-                                string currentClass;
-                                if (item.Naam == User.FindFirstValue(ClaimTypes.Name))
-                                    currentClass = "";
-                                else
-                                    currentClass = "disabled";
-                                string editClass = "fa fa-pencil ";
-                                editClass += currentClass;
-                                string deleteClass = "fa fa-trash ";
-                                deleteClass += currentClass;
+                        {
+                            string editClass = "fa fa-pencil ";
+                            string deleteClass = "fa fa-trash ";
+                            string statusClass;
+                            if (item.Naam == User.FindFirstValue(ClaimTypes.Name))
+                                statusClass = "";
+                            else
+                                statusClass = "disabled";
+                            editClass += statusClass;
+                            deleteClass += statusClass;
 
                             <li class="list-group-item">
                                 <div class="row">

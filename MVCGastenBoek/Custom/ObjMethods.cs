@@ -8,7 +8,7 @@ using System.Reflection.Emit;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Mnemonic.Custom
+namespace MVCGastenBoek.Custom
 {
     public static class ObjMethods
     {
