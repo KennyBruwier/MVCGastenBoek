@@ -23,7 +23,7 @@
                         @foreach (var item in Model.Comments)
                             {
                                 string currentClass;
-                                if (item.Author == User.FindFirstValue(ClaimTypes.Name))
+                                if (item.Naam == User.FindFirstValue(ClaimTypes.Name))
                                     currentClass = "";
                                 else
                                     currentClass = "disabled";
