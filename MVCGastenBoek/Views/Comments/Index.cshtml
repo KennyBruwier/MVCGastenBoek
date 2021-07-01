@@ -1,0 +1,121 @@
+﻿@model CommentIndexViewModel
+@using System.Security.Claims
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h1>Index</h1>
+    <div class="container">
+        <div class="row">
+            <div class="panel panel-default widget">
+                <div class="panel-heading">
+                    <span class="glyphicon glyphicon-comment"></span>
+                    <h3 class="panel-title">
+                        Recent Comments
+                    </h3>
+                    <span class="label label-info">
+                        @Model.Comments.Count();
+                    </span>
+                </div>
+                <div class="panel-body">
+                    <ul class="list-group">
+                        @foreach (var item in Model.Comments)
+                            {
+                                string currentClass;
+                                if (item.Author == User.FindFirstValue(ClaimTypes.Name))
+                                    currentClass = "";
+                                else
+                                    currentClass = "disabled";
+                                string editClass = "fa fa-pencil ";
+                                editClass += currentClass;
+                                string deleteClass = "fa fa-trash ";
+                                deleteClass += currentClass;
+
+                            <li class="list-group-item">
+                                <div class="row">
+                                    @*<div class="col-xs-2 col-md-1">
+                                        <img src="http://placehold.it/80" class="img-circle img-responsive" alt="" />
+                                    </div>*@
+                                    <div class="col-xs-10 col-md-11">
+                                        <div>
+                                            @Html.DisplayFor(modelItem => item.Title)
+                                            @*<a href="http://www.jquery2dotnet.com/2013/10/google-style-login-page-desing-usign.html">
+                                                Google Style Login Page Design Using Bootstrap
+                                            </a>*@
+                                            <div class="mic-info">
+                                                By: @Html.DisplayFor(modelItem => item.Naam) on @Html.DisplayFor(modelItem => item.Created)
+                                            </div>
+                                        </div>
+                                        <div class="comment-text">
+                                            @Html.DisplayFor(modelItem => item.MyComment)
+                                        </div>
+                                        <div class="action">
+                                            <a asp-action="Edit" asp-route-id="@item.CommentId" class="@editClass" ></a> |
+                                            <a asp-action="Details" asp-route-id="@item.CommentId" class="fa fa-info"></a> |
+                                            <a asp-action="Delete" asp-route-id="@item.CommentId" class="@deleteClass"></a>
+                                            @*<button type="button" class="btn btn-primary btn-xs" title="Edit" asp-action="Edit" asp-route-id="@item.CommentId">
+                                                <span class="fa fa-pencil"></span>
+                                            </button>
+                                            <button type="button" class="btn btn-success btn-xs" title="Details" asp-action="Details" asp-route-id="@item.CommentId">
+                                                <span class="fa fa-info"></span>
+                                            </button>
+                                            <button type="button" class="btn btn-danger btn-xs" title="Delete" asp-action="Delete" asp-route-id="@item.CommentId">
+                                                <span class="fa fa-trash"></span>
+                                            </button>*@
+                                        </div>
+                                    </div>
+                                </div>
+                            </li>
+                        }
+                    </ul>
+                    @*<a href="#" class="btn btn-primary btn-sm btn-block" role="button"><span class="glyphicon glyphicon-refresh"></span> More</a>*@
+                </div>
+            </div>
+        </div>
+    </div>
+    @*<div class="row">
+            <strong>
+                @Html.DisplayFor(modelItem => item.Naam)
+
+            </strong>
+        </div>*@
+
+
+<hr />
+<h4>New Comment</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Create">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+                <label asp-for="@Model.Comment.Title" class="control-label"></label>
+                <input asp-for="@Model.Comment.Title" class="form-control"/>
+                <span asp-validation-for="@Model.Comment.Title" class="text-danger"></span>
+            </div>            <div class="form-group">
+                <label asp-for="@Model.Comment.MyComment" class="control-label"></label>
+                <input asp-for="@Model.Comment.MyComment" class="form-control" />
+                <span asp-validation-for="@Model.Comment.MyComment" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="@Model.Comment.ImgPath" class="control-label"></label>
+                <input asp-for="@Model.Comment.ImgPath" class="form-control" type="hidden" />
+                <input asp-for="@Model.Comment.NewImage" class="form-control" />
+            </div>
+            <div class="form-group">
+                <label asp-for="@Model.Comment.Mood" class="control-label"></label>
+                <select asp-for="@Model.Comment.Mood" class="form-control" id="mood">
+                    <option>none</option>
+                    <option style="background-image: url(../Images/Blij.png)">blij</option>
+                    <option style="background-image: url(../Images/Matig.png)">matig</option>
+                    <option style="background-image: url(../Images/Droevig.png)">droevig</option>
+                    <option style="background-image: url(../Images/Boos.png)">boos</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Create" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
