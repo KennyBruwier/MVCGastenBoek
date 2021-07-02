@@ -30,7 +30,10 @@
             @Html.DisplayNameFor(model => model.ImgPath)
         </dt>
         <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.ImgPath)
+            @if (!String.IsNullOrEmpty(Model.ImgPath))
+            {
+                <img src="@Model.ImgPath" class="medium" />
+            }
         </dd>
         <dt class="col-sm-2">
             @Html.DisplayNameFor(model => model.Mood)

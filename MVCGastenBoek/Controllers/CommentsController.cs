@@ -87,7 +87,7 @@ namespace MVCGastenBoek.Controllers
         [Authorize]
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("CommentId,Naam,Created,ImgPath,Mood,NewImage,MyComment,Title")] CommentViewModel commentVM)
+        public async Task<IActionResult> Create([Bind("CommentId,Naam,Created,ImgPath,Mood,NewImage,MyComment,Title,MoodStatus")] CommentViewModel commentVM)
         {
             if (ModelState.IsValid)
             {
@@ -114,7 +114,9 @@ namespace MVCGastenBoek.Controllers
             {
                 return NotFound();
             }
-            return View(ModelToViewModel(comment));
+            CommentViewModel vm = new CommentViewModel();
+            vm = ModelToViewModel(comment);
+            return View(vm);
         }
 
         // POST: Comments/Edit/5
@@ -123,7 +125,7 @@ namespace MVCGastenBoek.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         [Authorize]
-        public async Task<IActionResult> Edit(int id, [Bind("CommentId,Naam,Created,ImgPath,Mood,NewImage,MyComment,Title")] CommentViewModel commentVM)
+        public async Task<IActionResult> Edit(int id, [Bind("CommentId,Naam,Created,ImgPath,Mood,NewImage,MyComment,Title,MoodStatus")] CommentViewModel commentVM)
         {
             if (id != commentVM.CommentId)
             {

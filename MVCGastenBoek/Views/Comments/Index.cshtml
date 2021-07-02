@@ -2,37 +2,57 @@
 @using System.Security.Claims
 
 @{
+    //int min = ViewBag.min;
     ViewData["Title"] = "Index";
+    //min = Math.Clamp(min, 0, @Model.Comments.Count() - 5);
     int min = (int)ViewData["min"];
+    //ViewBag.min = min;
     //int max = (int)ViewData["max"];
-    int previousMin = min - 5;
+    int previousMin = Math.Clamp(min-5, 0, @Model.Comments.Count() - 5);
     //int previousMax = max - 5;
-    int nextMin = min + 5;
+    int nextMin = Math.Clamp(min+5, 0, @Model.Comments.Count() - 5);
     //int nextMax = max + 5;
+    //void previous()
+    //{
+    //    ViewBag.min = ViewBag.min - 5;
+    //}
+    //void next()
+    //{
+    //    ViewBag.min = ViewBag.min + 5;
+    //}
 }
 
 <h1>Comments</h1>
-<p>
-    <a asp-controller="Comments" asp-action="Index" asp-route-min="@previousMin">Previous comments</a>
-    <a asp-controller="Comments" asp-action="Index" asp-route-min="@nextMin">Next comments</a>
-</p>
+
     <div class="container">
         <div class="row">
             <div class="panel panel-body widget">
                 <div class="panel-title">
-                    <span class="fa fa-comment"></span>
-                    <h3 class="panel-title">
-                        Recent Comments
-                    </h3>
+                    @*<span class="fa fa-comment">*@
+                        <h3 class="panel-title">
+                            <span class="fa fa-comment"/>Recent Comments
+                        </h3>
+                    @*</span>*@
+
                     <span class="text text-info">
-                        @Model.Comments.Count()
+                        <strong>Total comments: @Model.Comments.Count()</strong>
+                        
+                        <p>
+                            @if (min != 0)
+                            {
+                                <a asp-controller="Comments" asp-action="Index" asp-route-min="@previousMin">Previous comments</a>
+                            }
+                            @if (min != @Model.Comments.Count() - 5)
+                            {
+                                <a asp-controller="Comments" asp-action="Index" asp-route-min="@nextMin">Next comments</a>
+                            }
+                        </p>
                     </span>
                 </div>
                 <div class="panel-body">
                     <ul class="list-group">
                         @foreach (var item in Model.Comments.Skip(min).Take(5))
                         {
-                            
                             string editClass = "fa fa-pencil btn btn-primary ";
                             string deleteClass = "fa fa-trash btn btn-danger ";
                             string statusClass;
@@ -47,7 +67,6 @@
                             {
                                 imgPath = item.ImgPath;
                             }
-
                             <li class="list-group-item">
                                 <div class="row">
                                     <div class="col-xs-2 col-md-1">
@@ -56,7 +75,9 @@
                                     <div class="col-xs-10 col-md-11">
                                         <div>
                                             <strong>
-                                                @Html.DisplayFor(modelItem => item.Title)
+                                                <a asp-action="Details" asp-route-id="@item.CommentId" class="card-title">
+                                                    @Html.DisplayFor(modelItem => item.Title)
+                                                </a>
                                             </strong>
                                             @*<a href="http://www.jquery2dotnet.com/2013/10/google-style-login-page-desing-usign.html">
                                 Google Style Login Page Design Using Bootstrap
@@ -75,33 +96,16 @@
                                             <a asp-action="Edit" asp-route-id="@item.CommentId" class="@editClass"></a> |
                                             <a asp-action="Details" asp-route-id="@item.CommentId" class="fa fa-info btn btn-primary"></a> |
                                             <a asp-action="Delete" asp-route-id="@item.CommentId" class="@deleteClass"></a>
-                                                @*<button type="button" class="btn btn-primary btn-xs" title="Edit" asp-action="Edit" asp-route-id="@item.CommentId">
-                <span class="fa fa-pencil"></span>
-            </button>
-            <button type="button" class="btn btn-success btn-xs" title="Details" asp-action="Details" asp-route-id="@item.CommentId">
-                <span class="fa fa-info"></span>
-            </button>
-            <button type="button" class="btn btn-danger btn-xs" title="Delete" asp-action="Delete" asp-route-id="@item.CommentId">
-                <span class="fa fa-trash"></span>
-            </button>*@
                                         </div>
                                     </div>
                                 </div>
                             </li>
                         }
                     </ul>
-                    @*<a href="#" class="btn btn-primary btn-sm btn-block" role="button"><span class="glyphicon glyphicon-refresh"></span> More</a>*@
                 </div>
             </div>
         </div>
     </div>
-    @*<div class="row">
-            <strong>
-                @Html.DisplayFor(modelItem => item.Naam)
-
-            </strong>
-        </div>*@
-
 
 <hr />
 <h4>New Comment</h4>
@@ -126,12 +130,12 @@
             </div>
             <div class="form-group">
                 <label asp-for="@Model.Comment.Mood" class="control-label"></label>
-                <select asp-for="@Model.Comment.Mood" class="form-control" id="mood">
-                    <option>none</option>
+                <select asp-for="@Model.Comment.Mood" class="form-control" id="mood" asp-items="@Model.Comment.MoodStatus">
+                    @*<option>none</option>
                     <option style="background-image: url(../Images/Blij.png)">blij</option>
                     <option style="background-image: url(../Images/Matig.png)">matig</option>
                     <option style="background-image: url(../Images/Droevig.png)">droevig</option>
-                    <option style="background-image: url(../Images/Boos.png)">boos</option>
+                    <option style="background-image: url(../Images/Boos.png)">boos</option>*@
                 </select>
             </div>
             <div class="form-group">
