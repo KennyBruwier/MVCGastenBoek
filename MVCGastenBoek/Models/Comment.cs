@@ -26,6 +26,7 @@ namespace MVCGastenBoek.Models
         [MaxLength(20)]
         public string Naam { get; set; }
         [DataType(DataType.DateTime)]
+        [DisplayFormat(DataFormatString = @"{0:ddd dd, MMM yyyy HH:MM}", ApplyFormatInEditMode = true)]
         public DateTime Created { get; set; }
         [DisplayName("Foto")]
         public string ImgPath { get; set; }

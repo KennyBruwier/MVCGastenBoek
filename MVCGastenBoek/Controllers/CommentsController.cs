@@ -21,7 +21,6 @@ namespace MVCGastenBoek.Controllers
     {
         private readonly GastenBoekContext _context;
         private readonly IWebHostEnvironment _hostEnvironment;
-        //private readonly UserManager<IdentityUser> userManager;
         public CommentsController(GastenBoekContext context, IWebHostEnvironment hostEnvironment)
         {
             _context = context;
@@ -29,16 +28,22 @@ namespace MVCGastenBoek.Controllers
         }
         [Authorize]
         // GET: Comments
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(int min)
         {
+            int aantalComments = _context.Comments.Count();
+            //if (max == 0)
+            //    max = 5;
+            //max = Math.Clamp(max, 5, aantalComments);
+            min = Math.Clamp(min, 0, aantalComments-5);
+            ViewData["min"] = min;
+            //ViewData["max"] = max;
             var vm = new CommentIndexViewModel() 
             {
-                 Comments = await _context.Comments.ToListAsync(),
-                 Comment = new CommentViewModel()
+                 Comments = await _context.Comments.ToListAsync()
             };
             return View(vm);
         }
-
+        [Authorize]
         // GET: Comments/Details/5
         public async Task<IActionResult> Details(int? id)
         {
@@ -56,7 +61,7 @@ namespace MVCGastenBoek.Controllers
 
             return View(comment);
         }
-
+        [Authorize]
         // GET: Comments/Create
         public IActionResult Create()
         {
@@ -79,6 +84,7 @@ namespace MVCGastenBoek.Controllers
         // POST: Comments/Create
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
+        [Authorize]
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("CommentId,Naam,Created,ImgPath,Mood,NewImage,MyComment,Title")] CommentViewModel commentVM)
@@ -95,6 +101,7 @@ namespace MVCGastenBoek.Controllers
         }
 
         // GET: Comments/Edit/5
+        [Authorize]
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -115,6 +122,7 @@ namespace MVCGastenBoek.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize]
         public async Task<IActionResult> Edit(int id, [Bind("CommentId,Naam,Created,ImgPath,Mood,NewImage,MyComment,Title")] CommentViewModel commentVM)
         {
             if (id != commentVM.CommentId)
@@ -149,6 +157,7 @@ namespace MVCGastenBoek.Controllers
         }
 
         // GET: Comments/Delete/5
+        [Authorize]
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
@@ -167,6 +176,7 @@ namespace MVCGastenBoek.Controllers
         }
 
         // POST: Comments/Delete/5
+        [Authorize]
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)

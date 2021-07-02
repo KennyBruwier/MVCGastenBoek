@@ -3,27 +3,38 @@
 
 @{
     ViewData["Title"] = "Index";
+    int min = (int)ViewData["min"];
+    //int max = (int)ViewData["max"];
+    int previousMin = min - 5;
+    //int previousMax = max - 5;
+    int nextMin = min + 5;
+    //int nextMax = max + 5;
 }
 
-<h1>Index</h1>
+<h1>Comments</h1>
+<p>
+    <a asp-controller="Comments" asp-action="Index" asp-route-min="@previousMin">Previous comments</a>
+    <a asp-controller="Comments" asp-action="Index" asp-route-min="@nextMin">Next comments</a>
+</p>
     <div class="container">
         <div class="row">
-            <div class="panel panel-default widget">
-                <div class="panel-heading">
-                    <span class="glyphicon glyphicon-comment"></span>
+            <div class="panel panel-body widget">
+                <div class="panel-title">
+                    <span class="fa fa-comment"></span>
                     <h3 class="panel-title">
                         Recent Comments
                     </h3>
-                    <span class="label label-info">
+                    <span class="text text-info">
                         @Model.Comments.Count()
                     </span>
                 </div>
                 <div class="panel-body">
                     <ul class="list-group">
-                        @foreach (var item in Model.Comments)
+                        @foreach (var item in Model.Comments.Skip(min).Take(5))
                         {
-                            string editClass = "fa fa-pencil ";
-                            string deleteClass = "fa fa-trash ";
+                            
+                            string editClass = "fa fa-pencil btn btn-primary ";
+                            string deleteClass = "fa fa-trash btn btn-danger ";
                             string statusClass;
                             if (item.Naam == User.FindFirstValue(ClaimTypes.Name))
                                 statusClass = "";
@@ -58,18 +69,21 @@
                                             @Html.DisplayFor(modelItem => item.MyComment)
                                         </div>
                                         <div class="action">
+                                            @*<button type="button" class="btn btn-primary btn-xs" title="Edit" asp-controller="Comments" asp-action="Edit" asp-route-id="@item.CommentId">
+                                                <span class="fa fa-pencil"></span>
+                                            </button>*@
                                             <a asp-action="Edit" asp-route-id="@item.CommentId" class="@editClass"></a> |
-                                            <a asp-action="Details" asp-route-id="@item.CommentId" class="fa fa-info"></a> |
+                                            <a asp-action="Details" asp-route-id="@item.CommentId" class="fa fa-info btn btn-primary"></a> |
                                             <a asp-action="Delete" asp-route-id="@item.CommentId" class="@deleteClass"></a>
-                                            @*<button type="button" class="btn btn-primary btn-xs" title="Edit" asp-action="Edit" asp-route-id="@item.CommentId">
-                                <span class="fa fa-pencil"></span>
-                            </button>
-                            <button type="button" class="btn btn-success btn-xs" title="Details" asp-action="Details" asp-route-id="@item.CommentId">
-                                <span class="fa fa-info"></span>
-                            </button>
-                            <button type="button" class="btn btn-danger btn-xs" title="Delete" asp-action="Delete" asp-route-id="@item.CommentId">
-                                <span class="fa fa-trash"></span>
-                            </button>*@
+                                                @*<button type="button" class="btn btn-primary btn-xs" title="Edit" asp-action="Edit" asp-route-id="@item.CommentId">
+                <span class="fa fa-pencil"></span>
+            </button>
+            <button type="button" class="btn btn-success btn-xs" title="Details" asp-action="Details" asp-route-id="@item.CommentId">
+                <span class="fa fa-info"></span>
+            </button>
+            <button type="button" class="btn btn-danger btn-xs" title="Delete" asp-action="Delete" asp-route-id="@item.CommentId">
+                <span class="fa fa-trash"></span>
+            </button>*@
                                         </div>
                                     </div>
                                 </div>
@@ -94,7 +108,7 @@
 <hr />
 <div class="row">
     <div class="col-md-4">
-        <form asp-action="CreateFromIndex">
+        <form asp-action="CreateFromIndex" enctype="multipart/form-data">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div class="form-group">
                 <label asp-for="@Model.Comment.Title" class="control-label"></label>

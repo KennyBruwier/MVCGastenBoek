@@ -1,6 +1,11 @@
 ﻿/* Please see documentation at https://docs.microsoft.com/aspnet/core/client-side/bundling-and-minification
 for details on configuring this project to bundle and minify static web assets. */
 
+.col-md-1 {
+/*    -ms-flex: 0 0 8.333333%;
+    flex: 0 0 8.333333%;*/
+    max-width: 100% !important;
+}
 .img-circle {
     border-radius: 50%;
 }
