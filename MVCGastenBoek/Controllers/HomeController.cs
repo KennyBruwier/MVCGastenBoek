@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
+using MVCGastenBoek.Database;
 using MVCGastenBoek.Models;
 using System;
 using System.Collections.Generic;
@@ -14,14 +15,16 @@ namespace MVCGastenBoek.Controllers
     public class HomeController : Controller
     {
         private readonly ILogger<HomeController> _logger;
-        private readonly UserManager<IdentityUser> userManager;
-        private readonly SignInManager<IdentityUser> signInManager;
+        private readonly UserManager<ApplicationUser> userManager;
+        private readonly SignInManager<ApplicationUser> signInManager;
+        private readonly GastenBoekContext _context;
 
-        public HomeController(ILogger<HomeController> logger, UserManager<IdentityUser>userManager, SignInManager<IdentityUser>signInManager)
+        public HomeController(ILogger<HomeController> logger, UserManager<ApplicationUser>userManager, SignInManager<ApplicationUser>signInManager, GastenBoekContext context)
         {
             _logger = logger;
             this.userManager = userManager;
             this.signInManager = signInManager;
+            _context = context;
         }
         public IActionResult Login()
         {
@@ -45,7 +48,7 @@ namespace MVCGastenBoek.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Register(string username, string password)
         {
-            var result = await userManager.CreateAsync(new IdentityUser() { UserName = username }, password);
+            var result = await userManager.CreateAsync(new ApplicationUser() { UserName = username }, password);
             if (result.Succeeded)
             {
                 var signInResult = await signInManager.PasswordSignInAsync(username, password, false, false);
@@ -79,5 +82,6 @@ namespace MVCGastenBoek.Controllers
         {
             return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
         }
+
     }
 }

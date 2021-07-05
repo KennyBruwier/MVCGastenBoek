@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace MVCGastenBoek.Database
 {
-    public class GastenBoekContext : IdentityDbContext
+    public class GastenBoekContext : IdentityDbContext<ApplicationUser>
     {
         public GastenBoekContext(DbContextOptions options) : base(options)
         {
@@ -16,5 +16,6 @@ namespace MVCGastenBoek.Database
         }
 
         public DbSet<Comment> Comments { get; set; }
+
     }
 }
